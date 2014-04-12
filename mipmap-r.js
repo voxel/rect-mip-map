@@ -4,7 +4,7 @@ var ndarray = require('ndarray');
 var ops = require('ndarray-ops');
 var downsample = require('ndarray-downsample2x');
 
-var makeMipMaps = function(array, pad, rects, maxLevels) {
+var makeMipMaps = function(array, rects, maxLevels) {
   var levels = [];
 
   var rectsX = [], rectsY = [], rectsW = [], rectsH = [];
@@ -49,24 +49,11 @@ var makeMipMaps = function(array, pad, rects, maxLevels) {
     if (levels.length === 0) {
       // first level, same size
      
-      // pad tiles 
-      var ox = 0, oy = 0;
+      // copy rects (note: could just copy entire array all at once; but also have to downsize dimensions regardless)
       for (var i = 0; i < rectsX.length; i += 1) {
         var rx = rectsX[i], ry = rectsY[i], rw = rectsW[i], rh = rectsH[i];
 
-        for (var x = 0; x < pad; x += 1) {
-          for (var y = 0; y < pad; y += 1) {
-            var px = x * rw;
-            var py = y * rh;
-            console.log('pad',px,py);
-            ops.assign(level.lo(ry+py+oy,rx+px+ox).hi(rh,rw), array.lo(ry,rx).hi(rh,rw));
-          }
-        }
-        // accumulate offsets to fit padded tiles TODO: this is very wasteful, extra diagonal space
-        /*
-        ox += rw;
-        oy += rh;
-        */
+        ops.assign(level.lo(ry,rx).hi(rh,rw), array.lo(ry,rx).hi(rh,rw));
 
         // shrink for next level
         rectsX[i] >>>= 1;
