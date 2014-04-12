@@ -2,6 +2,8 @@
 
 var createRects = require('atlaspack');
 var ndarray = require('ndarray');
+var getPixels = require('get-pixels');
+var savePixels = require('save-pixels');
 var rectMipMap = require('./mipmap-r.js');
 
 var canvas = document.createElement('canvas');
@@ -10,7 +12,7 @@ var SIZE = 256;
 
 canvas.width = canvas.height = SIZE;
 canvas.style.border = '1px solid black';
-canvas.style.width = canvas.style.height = (SIZE * 4) + 'px'; // scale up for easy viewing TODO: disable fuzziness
+//canvas.style.width = canvas.style.height = (SIZE * 4) + 'px'; // scale up for easy viewing TODO: disable fuzziness
 document.body.appendChild(canvas); // TODO: remove dependence on canvas
 
 var rects = createRects(canvas);
@@ -38,10 +40,23 @@ var getImg = function(name) {
 });
 //rects.pack(getImg(images.logo));
 
-rects._debug(); // shows red borders around each rect
+//rects._debug(); // shows red borders around each rect
 global.rects = rects;
 
 var array = ndarray(new Uint8Array(SIZE*SIZE*4), [SIZE,SIZE,4]); // image
 var pad = 1;
-var pyramid = rectMipMap(array, pad, rects);
-console.log(pyramid);
+getPixels(canvas.toDataURL(), function(err, pixels) {
+  if (err) throw new Error('get-pixels failed: '+err);
+  var pyramid = rectMipMap(array, pad, rects);
+  console.log(pyramid);
+
+  pyramid.forEach(function(level) {
+    var img = new Image();
+    img.src = savePixels(level, 'canvas').toDataURL();
+    img.style.border = '1px dotted black';
+    document.body.appendChild(document.createElement('br'));
+    document.body.appendChild(img);
+  });
+});
+
+
