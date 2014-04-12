@@ -75,18 +75,23 @@ var makeMipMaps = function(array, pad, rects) {
           var levelChannel = level.pick(undefined, undefined, k);
           var plevelChannel = plevel.pick(undefined, undefined, k);
 
-          downsample(levelChannel.lo(ry,rx).hi(rh,rw), plevelChannel.lo(ry>>1,rx>>1).hi(rh>>1,rw>>1), 0, 255)
+          downsample(levelChannel.lo(ry,rx).hi(rh,rw), plevelChannel.lo(ry<<1,rx<<1).hi(rh<<1,rw<<1), 0, 255)
         }
-        //downsample(level.lo(ry,rx).hi(rh,rw), plevel.lo(ry,rx).hi(rh,rw), 0, 255)
+
+        // shrink for next level
+        rectsX[i] >>>= 1;
+        rectsY[i] >>>= 1;
+        rectsW[i] >>>= 1;
+        rectsH[i] >>>= 1;
       }
       //ops.assign(level, plevel);
       /* the all-together native downsampling that causes blending artifacts
-       */
       for (var k = 0; k < channels; k += 1) {
         var levelChannel = level.pick(undefined, undefined, k);
         var plevelChannel = plevel.pick(undefined, undefined, k);
         downsample(levelChannel, plevelChannel, 0, 255);
       }
+      */
     }
 
     levels.push(level);
