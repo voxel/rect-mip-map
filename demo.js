@@ -1,6 +1,6 @@
 'use strict';
 
-var createRects = require('atlaspack');
+var createAtlas = require('atlaspack');
 var ndarray = require('ndarray');
 var getPixels = require('get-pixels');
 var savePixels = require('save-pixels');
@@ -16,7 +16,7 @@ canvas.style.border = '1px solid black';
 //canvas.style.width = canvas.style.height = (SIZE * 4) + 'px'; // scale up for easy viewing TODO: disable fuzziness
 //document.body.appendChild(canvas); // redundant since we also show mip level #0
 
-var rects = createRects(canvas);
+var atlas = createAtlas(canvas);
 
 var imageURLs = {
   // test 16x16 images
@@ -36,17 +36,17 @@ var getImg = function(name) {
 };
 
 ['grass', 'stone', 'crate', 'stick'].forEach(function(name) {
-  rects.pack(getImg(name));
+  atlas.pack(getImg(name));
 });
-//rects.pack(getImg(images.logo));
+//atlas.pack(getImg(images.logo));
 
-//rects._debug(); // shows red borders around each rect
-global.rects = rects;
+//atlas._debug(); // shows red borders around each rect
+global.atlas = atlas; // debug
 
 getPixels(canvas.toDataURL(), function(err, array) {
   if (err) throw new Error('get-pixels failed: '+err);
 
-  var pyramid = rectMipMap(array, rects);
+  var pyramid = rectMipMap(array, atlas);
   console.log(pyramid);
 
   pyramid.forEach(function(level, i) {
