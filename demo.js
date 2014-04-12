@@ -50,12 +50,13 @@ getPixels(canvas.toDataURL(), function(err, array) {
   var pyramid = rectMipMap(array, pad, rects);
   console.log(pyramid);
 
-  pyramid.forEach(function(level) {
+  pyramid.forEach(function(level, i) {
     var img = new Image();
     img.src = savePixels(level, 'canvas').toDataURL();
     img.style.border = '1px dotted black';
     document.body.appendChild(document.createElement('br'));
     document.body.appendChild(img);
+    document.body.appendChild(document.createTextNode(' level #'+i+' ('+img.width+'x'+img.height+')'));
   });
 });
 

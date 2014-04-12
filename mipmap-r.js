@@ -4,7 +4,7 @@ var ndarray = require('ndarray');
 var ops = require('ndarray-ops');
 var downsample = require('ndarray-downsample2x');
 
-var makeMipMaps = function(array, pad, rects) {
+var makeMipMaps = function(array, pad, rects, maxLevels) {
   var levels = [];
 
   var rectsX = [], rectsY = [], rectsW = [], rectsH = [];
@@ -13,6 +13,8 @@ var makeMipMaps = function(array, pad, rects) {
   var mx = s[0], my = s[1], channels = s[2];
   var ctor = array.data.constructor;
   var uvs = rects.uv();
+  var biggestRectIndex = undefined;
+  var biggestRectDim = 0;
   for (var name in uvs) {
     // UV coordinates 0.0 - 1.0
     var uvTopLeft = uvs[name][0];      // *\  01
@@ -21,18 +23,26 @@ var makeMipMaps = function(array, pad, rects) {
     // scale UVs by image size to get pixel coordinates
     var sx = uvTopLeft[0] * mx, sy = uvTopLeft[1] * my;
     var ex = uvBottomRight[0] * mx, ey = uvBottomRight[1] * my;
+    var w = ex - sx;
+    var h = ey - sy;
 
-    console.log(name,sx,sy,ex,ey);
+    if (w > biggestRectDim) {
+      biggestRectDim = w;
+      biggestRectIndex = rectsX.length;
+    } else if (h > biggestRectDim) {
+      biggestRectDim = h;
+      biggestRectIndex = rectsX.length;
+    }
 
     rectsX.push(sx);
     rectsY.push(sy);
-    rectsW.push(ex - sx);
-    rectsH.push(ey - sy);
+    rectsW.push(w);
+    rectsH.push(h);
   }
 
-  var maxLevels = 5; // TODO: iterate rects, find max
+  maxLevels = maxLevels || Infinity;
   var tx = mx, ty = my;
-  while(maxLevels--) {
+  do {
     var sz = tx * ty * channels;
     var level = ndarray(new ctor(sz), [tx,ty,channels]);
 
@@ -96,10 +106,20 @@ var makeMipMaps = function(array, pad, rects) {
 
     levels.push(level);
 
-    // halve the dimensions
+    // halve the total dimensions for the next level
     tx >>>= 1;
     ty >>>= 1;
-  }
+
+    if (tx === 0 || ty === 0) {
+      // atlas itself got too small before any rects, shouldn't really happen..
+      break;
+    }
+    if (rectsW[biggestRectIndex] === 0 || rectsH[biggestRectIndex] === 0) {
+      // the biggest rect shrank down to nothing, no point in scaling down further
+      // (parity with tile-mip-map)
+      break;
+    }
+  } while(levels.length < maxLevels);
 
   return levels;
 };
