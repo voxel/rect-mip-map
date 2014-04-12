@@ -43,10 +43,10 @@ var getImg = function(name) {
 //rects._debug(); // shows red borders around each rect
 global.rects = rects;
 
-var array = ndarray(new Uint8Array(SIZE*SIZE*4), [SIZE,SIZE,4]); // image
 var pad = 1;
-getPixels(canvas.toDataURL(), function(err, pixels) {
+getPixels(canvas.toDataURL(), function(err, array) {
   if (err) throw new Error('get-pixels failed: '+err);
+
   var pyramid = rectMipMap(array, pad, rects);
   console.log(pyramid);
 
