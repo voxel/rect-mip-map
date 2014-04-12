@@ -37,6 +37,9 @@ var makeMipMaps = function(array, pad, rects) {
 
     if (levels.length === 0) {
       // first level, same size
+     
+      // pad tiles 
+      var ox = 0, oy = 0;
       for (var i = 0; i < rectsX.length; i += 1) {
         var rx = rectsX[i], ry = rectsY[i], rw = rectsW[i], rh = rectsH[i];
 
@@ -45,11 +48,12 @@ var makeMipMaps = function(array, pad, rects) {
             var px = x * rw;
             var py = y * rh;
             console.log('pad',px,py);
-            ops.assign(level.lo(ry+py,rx+px).hi(rh,rw), array.lo(ry,rx).hi(rh,rw));
-            break;
+            ops.assign(level.lo(ry+py+oy,rx+px+ox).hi(rh,rw), array.lo(ry,rx).hi(rh,rw));
           }
-          break;
         }
+        // accumulate offsets to fit padded tiles TODO: this is sort of wasteful
+        ox += rw;
+        oy += rh;
       }
     } else {
       // TODO: downsample previous
