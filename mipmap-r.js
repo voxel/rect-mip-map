@@ -23,13 +23,11 @@ var makeMipMaps = function(array, pad, rects) {
 
     console.log(name,sx,sy,ex,ey);
 
-    var view = array.lo(sx, sy).hi(ex - sx, ey - sy);
     rectsX.push(sx);
     rectsY.push(sy);
-    rectsW.push(ex - sy);
+    rectsW.push(ex - sx);
     rectsH.push(ey - sy);
   }
-  rectsX.length=1; // test only one
 
   var maxLevels = 5; // TODO: iterate rects, find max
   var tx = mx, ty = my;
@@ -40,17 +38,13 @@ var makeMipMaps = function(array, pad, rects) {
     if (levels.length === 0) {
       // first level, same size
       //ops.assign(level, array);
-      for (var i = 0; i < rectsX.length; i += 1) {
+      //for (var i = 0; i < rectsX.length; i += 1) {
+      for (var i = 1; i < 2; i += 1) {
         var rx = rectsX[i], ry = rectsY[i], rw = rectsW[i], rh = rectsH[i];
 
         for (var x = 0; x < pad; x += 1) {
           for (var y = 0; y < pad; y += 1) {
-            console.log(view);
-            //ops.assign(level.lo(0,0).hi(16,16), view);
             ops.assign(level.lo(rx,ry).hi(rw,rh), array.lo(rx,ry).hi(rw,rh));
-
-            //var t0 = array.hi(sx, sy).lo(ex - sx, sy - ey); // TODO: get actual rect
-            //ops.assign(level.hi(sx, sy).lo(ex - sx, sy - ey), t0);
           }
         }
       }
