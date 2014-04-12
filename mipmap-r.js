@@ -42,8 +42,13 @@ var makeMipMaps = function(array, pad, rects) {
 
         for (var x = 0; x < pad; x += 1) {
           for (var y = 0; y < pad; y += 1) {
-            ops.assign(level.lo(ry,rx).hi(rh,rw), array.lo(ry,rx).hi(rh,rw));
+            var px = x * rw;
+            var py = y * rh;
+            console.log('pad',px,py);
+            ops.assign(level.lo(ry+py,rx+px).hi(rh,rw), array.lo(ry,rx).hi(rh,rw));
+            break;
           }
+          break;
         }
       }
     } else {
