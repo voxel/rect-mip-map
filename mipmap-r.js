@@ -37,14 +37,12 @@ var makeMipMaps = function(array, pad, rects) {
 
     if (levels.length === 0) {
       // first level, same size
-      //ops.assign(level, array);
-      //for (var i = 0; i < rectsX.length; i += 1) {
-      for (var i = 1; i < 2; i += 1) {
+      for (var i = 0; i < rectsX.length; i += 1) {
         var rx = rectsX[i], ry = rectsY[i], rw = rectsW[i], rh = rectsH[i];
 
         for (var x = 0; x < pad; x += 1) {
           for (var y = 0; y < pad; y += 1) {
-            ops.assign(level.lo(rx,ry).hi(rw,rh), array.lo(rx,ry).hi(rw,rh));
+            ops.assign(level.lo(ry,rx).hi(rh,rw), array.lo(ry,rx).hi(rh,rw));
           }
         }
       }
