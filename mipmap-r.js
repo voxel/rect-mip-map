@@ -51,9 +51,11 @@ var makeMipMaps = function(array, pad, rects) {
             ops.assign(level.lo(ry+py+oy,rx+px+ox).hi(rh,rw), array.lo(ry,rx).hi(rh,rw));
           }
         }
-        // accumulate offsets to fit padded tiles TODO: this is sort of wasteful
+        // accumulate offsets to fit padded tiles TODO: this is very wasteful, extra diagonal space
+        /*
         ox += rw;
         oy += rh;
+        */
       }
     } else {
       // TODO: downsample previous
