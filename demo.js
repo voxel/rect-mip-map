@@ -10,10 +10,11 @@ var canvas = document.createElement('canvas');
 
 var SIZE = 512;
 
+// TODO: remove dependence on canvas
 canvas.width = canvas.height = SIZE;
 canvas.style.border = '1px solid black';
 //canvas.style.width = canvas.style.height = (SIZE * 4) + 'px'; // scale up for easy viewing TODO: disable fuzziness
-document.body.appendChild(canvas); // TODO: remove dependence on canvas
+//document.body.appendChild(canvas); // redundant since we also show mip level #0
 
 var rects = createRects(canvas);
 
