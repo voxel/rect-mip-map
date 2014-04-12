@@ -1,9 +1,10 @@
 'use strict';
 
-var makeMipMaps = function(atlas, pad, rects) {
+var makeMipMaps = function(array, pad, rects) {
   var levels = [];
 
-  var mx = atlas.width, my = atlas.height;
+  var s = array.shape;
+  var mx = s[0], my = s[1];
   var uvs = rects.uv();
   for (var name in uvs) {
     var u = uvs[name][0], v = uvs[name][1];
