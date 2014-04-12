@@ -6,7 +6,7 @@ var ops = require('ndarray-ops');
 var makeMipMaps = function(array, pad, rects) {
   var levels = [];
 
-  var rectViews = [];
+  var rectsX = [], rectsY = [], rectsW = [], rectsH = [];
 
   var s = array.shape;
   var mx = s[0], my = s[1], channels = s[2];
@@ -24,9 +24,12 @@ var makeMipMaps = function(array, pad, rects) {
     console.log(name,sx,sy,ex,ey);
 
     var view = array.lo(sx, sy).hi(ex - sx, ey - sy);
-    rectViews.push(view);
+    rectsX.push(sx);
+    rectsY.push(sy);
+    rectsW.push(ex - sy);
+    rectsH.push(ey - sy);
   }
-  rectViews=[rectViews[0]]; // test only first rect for now
+  rectsX.length=1; // test only one
 
   var maxLevels = 5; // TODO: iterate rects, find max
   var tx = mx, ty = my;
@@ -37,12 +40,14 @@ var makeMipMaps = function(array, pad, rects) {
     if (levels.length === 0) {
       // first level, same size
       //ops.assign(level, array);
-      for (var i = 0; i < rectViews.length; i += 1) {
-        var view = rectViews[i];
+      for (var i = 0; i < rectsX.length; i += 1) {
+        var rx = rectsX[i], ry = rectsY[i], rw = rectsW[i], rh = rectsH[i];
 
         for (var x = 0; x < pad; x += 1) {
           for (var y = 0; y < pad; y += 1) {
-            ops.assign(level, view);
+            console.log(view);
+            //ops.assign(level.lo(0,0).hi(16,16), view);
+            ops.assign(level.lo(rx,ry).hi(rw,rh), array.lo(rx,ry).hi(rw,rh));
 
             //var t0 = array.hi(sx, sy).lo(ex - sx, sy - ey); // TODO: get actual rect
             //ops.assign(level.hi(sx, sy).lo(ex - sx, sy - ey), t0);
