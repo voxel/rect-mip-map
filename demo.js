@@ -7,6 +7,7 @@ var rectMipMap = require('./mipmap-r.js');
 var canvas = document.createElement('canvas');
 canvas.width = canvas.height = 256;
 canvas.style.border = '1px solid black';
+canvas.style.width = canvas.style.height = (256 * 4) + 'px'; // scale up for easy viewing TODO: disable fuzziness
 document.body.appendChild(canvas); // TODO: remove dependence on canvas
 
 var rects = createRects(canvas);
