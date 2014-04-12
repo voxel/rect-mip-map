@@ -8,7 +8,7 @@ var rectMipMap = require('./mipmap-r.js');
 
 var canvas = document.createElement('canvas');
 
-var SIZE = 256;
+var SIZE = 512;
 
 canvas.width = canvas.height = SIZE;
 canvas.style.border = '1px solid black';
