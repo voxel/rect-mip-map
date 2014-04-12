@@ -2,6 +2,7 @@
 
 var ndarray = require('ndarray');
 var ops = require('ndarray-ops');
+var downsample = require('ndarray-downsample2x');
 
 var makeMipMaps = function(array, pad, rects) {
   var levels = [];
@@ -56,14 +57,27 @@ var makeMipMaps = function(array, pad, rects) {
         ox += rw;
         oy += rh;
         */
+
+        // shrink for next level
+        rectsX[i] >>>= 1;
+        rectsY[i] >>>= 1;
+        rectsW[i] >>>= 1;
+        rectsH[i] >>>= 1;
       }
     } else {
-      // TODO: downsample previous
-      var plevel = levels[level.length - 1];
+      // downsample previous level
+      var plevel = levels[levels.length - 1];
+
+      for (var i = 0; i < rectsX.length; i += 1) {
+        var rx = rectsX[i], ry = rectsY[i], rw = rectsW[i], rh = rectsH[i];
+        downsample(level.lo(ry,rx).hi(rh,rw), plevel.lo(ry>>1,rx>>1).hi(rh>>1,rw>>1), 0, 255)
+        //downsample(level.lo(ry,rx).hi(rh,rw), plevel.lo(ry,rx).hi(rh,rw), 0, 255)
+      }
+      //ops.assign(level, plevel);
+      downsample(level, plevel, 0, 255);
     }
 
     levels.push(level);
-    break; // TODO
 
     // halve the dimensions
     tx >>>= 1;
