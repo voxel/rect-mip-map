@@ -1,7 +1,7 @@
 {
   "name": "rect-mip-map",
   "description": "arbitrary rectangle mip mapping for texture atlases",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "mipmap-r.js",
   "repository": {
     "type": "git",
@@ -22,7 +22,8 @@
   "devDependencies": {
     "atlaspack": "^0.2.5",
     "get-pixels": "^1.0.1",
-    "save-pixels": "^0.3.0"
+    "save-pixels": "^0.3.0",
+    "touchup": "^0.1.2"
   },
   "scripts": {
     "start": "beefy demo.js"
