@@ -1,7 +1,7 @@
 {
   "name": "rect-mip-map",
   "description": "arbitrary rectangle mip mapping for texture atlases",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "mipmap-r.js",
   "repository": {
     "type": "git",
