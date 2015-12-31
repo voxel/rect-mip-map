@@ -2,7 +2,7 @@
 
 var ndarray = require('ndarray');
 var ops = require('ndarray-ops');
-var downsample = require('ndarray-downsample2x');
+var downsample = require('ndarray-resample');
 
 var makeMipMaps = function(array, rects, maxLevels) {
   var levels = [];
