@@ -5,7 +5,7 @@
   "main": "mipmap-r.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:deathcap/rect-mip-map.git"
+    "url": "git@github.com:voxel/rect-mip-map.git"
   },
   "keywords": [
     "tile",
