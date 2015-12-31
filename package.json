@@ -23,10 +23,11 @@
     "atlaspack": "^0.2.5",
     "get-pixels": "^1.0.1",
     "save-pixels": "^0.3.0",
-    "touchup": "^0.1.2"
+    "touchup": "^0.1.2",
+    "wzrd": "^1.3.1"
   },
   "scripts": {
-    "start": "beefy demo.js"
+    "start": "wzrd demo.js"
   },
   "license": "MIT"
 }
