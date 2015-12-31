@@ -1,5 +1,7 @@
 # rect-mip-map
 
+[![Join the chat at https://gitter.im/voxel/rect-mip-map](https://badges.gitter.im/voxel/rect-mip-map.svg)](https://gitter.im/voxel/rect-mip-map?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Mip map generator for texture atlases with arbitrarily-sized rectangles
 
 Similar to [tile-mip-map](https://github.com/mikolalysenko/tile-mip-map), but instead
